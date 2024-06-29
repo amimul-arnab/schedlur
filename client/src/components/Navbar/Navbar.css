@@ -1,28 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-}
-
-.App-header {
-  text-align: center;
-  margin-top: 50px;
-}
-
-.App-header h1 {
-  color: #726F6F;
-  font-size: 8em;
-  font-weight: bold;
-  margin: 0 20px;
-}
-
-.App-header p {
-  color: #FF9999;
-  font-size: 8em;
-  font-weight: bold;
-  margin: 10px 20px;
-}
+/* client/src/components/Navbar/Navbar.css */
 
 .navbar {
   display: flex;
@@ -55,16 +31,12 @@ body {
 }
 
 .btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 10px 40px;
   border: none;
   border-radius: 15px;
-  font-size: 1.1em;
+  font-size: 1em;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
-  font-weight: 200;
   transition: transform 0.2s;
   text-decoration: none;
   color: white;

@@ -1,0 +1,23 @@
+/* client/src/components/LandingPage/LandingPage.css */
+.landing-page {
+  text-align: center;
+}
+
+.App-header {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.App-header h1 {
+  color: #726F6F;
+  font-size: 8em;
+  font-weight: bold;
+  margin: 0 20px;
+}
+
+.App-header p {
+  color: #FF9999;
+  font-size: 8em;
+  font-weight: bold;
+  margin: 10px 20px;
+}

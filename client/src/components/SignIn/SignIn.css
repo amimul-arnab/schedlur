@@ -1,0 +1,64 @@
+/* client/src/components/SignIn/SignIn.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px; /* Increase the max width */
+    margin: auto;
+    padding: 40px 20px; /* Add padding to the container */
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .logo {
+    height: 80px; /* Increase the size of the logo */
+    margin-bottom: 20px;
+  }
+  
+  h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .form-input {
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    padding: 15px; /* Increase padding for the inputs */
+    margin-bottom: 15px; /* Add margin between inputs */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #E8E8E8;
+  }
+  
+  .btn {
+    padding: 15px 20px; /* Increase padding for the button */
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    background-color: #F4D4D4;
+    color: white;
+    font-weight: bold;
+    width: 100%; /* Ensure the button is full width */
+    margin-top: 20px;
+  }
+  
+  p {
+    margin-top: 20px;
+  }
+  
+  .link {
+    color: #F4D4D4;
+    text-decoration: none;
+  }
+  
