@@ -1,21 +1,22 @@
-// client/src/components/Navbar/Navbar.js
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
-function Navbar() {
+const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <img src="/assets/logo.png" alt="Schedlur Logo" className="logo" />
-        <h1 className="brand-name">schedlur</h1>
+        <img src="/assets/logo.png" alt="Logo" className="logo" />
+        <span className="brand-name">schedlur</span>
       </div>
       <div className="navbar-right">
-        <Link to="/signup" className="btn signup-btn">Sign Up</Link>
-        <Link to="/signin" className="btn login-btn">Login</Link>
+        <button className="btn signup-btn" onClick={() => navigate('/signup')}>Sign Up</button>
+        <button className="btn login-btn" onClick={() => navigate('/signin')}>Login</button>
       </div>
     </nav>
   );
-}
+};
 
 export default Navbar;
