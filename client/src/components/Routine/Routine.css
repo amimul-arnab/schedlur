@@ -1,0 +1,12 @@
+.routine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .routine h1 {
+    font-size: 3em;
+    color: #333;
+  }
+  

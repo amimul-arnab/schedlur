@@ -1,21 +1,28 @@
 const express = require('express');
+const connectDB = require('./config/db');
+const dotenv = require('dotenv');
 const cors = require('cors');
-require('dotenv').config();
+
+dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Connect Database
+connectDB();
+
+// Initialize Middleware
 app.use(express.json());
 
+// Configure CORS
+app.use(cors({
+  origin: 'http://localhost:3000', // Allow only your frontend
+}));
 
-// Routes
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+// Define Routes
+app.use('/api/auth', require('./routes/auth'));
 
-// Server
 const PORT = process.env.PORT || 5001;
+
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

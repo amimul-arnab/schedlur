@@ -1,19 +1,17 @@
-// client/src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from './components/LandingPage/LandingPage';
 import SignUp from './components/SignUp/SignUp';
 import SignIn from './components/SignIn/SignIn';
-import './App.css';
+import Routine from './components/Routine/Routine';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/routine" element={<Routine />} />
         </Routes>
       </div>
     </Router>
@@ -21,3 +19,4 @@ function App() {
 }
 
 export default App;
+
