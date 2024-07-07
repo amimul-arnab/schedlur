@@ -1,31 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import './AddEvent.css';
 
-const AddEvent = ({ onClose, event, onAddEvent, onDeleteEvent, userId }) => {
+const AddEvent = ({ onClose, event, onAddEvent, onDeleteEvent, userId, defaultDate, defaultStartTime, defaultEndTime }) => {
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [date, setDate] = useState(defaultDate || '');
+  const [startTime, setStartTime] = useState(defaultStartTime || '');
+  const [endTime, setEndTime] = useState(defaultEndTime || '');
   const [reminder, setReminder] = useState('15 min');
   const [notes, setNotes] = useState('');
 
   useEffect(() => {
     if (event) {
       setTitle(event.title || '');
-      setDate(event.start ? event.start.split('T')[0] : ''); // Extract date part
-      setStartTime(event.start ? event.start.split('T')[1].slice(0, 5) : ''); // Extract time part
-      setEndTime(event.end ? event.end.split('T')[1].slice(0, 5) : ''); // Extract time part
+      setDate(event.start ? event.start.split('T')[0] : defaultDate || ''); // Extract date part
+      setStartTime(event.start ? event.start.split('T')[1].slice(0, 5) : defaultStartTime || ''); // Extract time part
+      setEndTime(event.end ? event.end.split('T')[1].slice(0, 5) : defaultEndTime || ''); // Extract time part
       setReminder(event.reminder || '15 min');
       setNotes(event.notes || '');
     } else {
       setTitle('');
-      setDate('');
-      setStartTime('');
-      setEndTime('');
+      setDate(defaultDate || '');
+      setStartTime(defaultStartTime || '');
+      setEndTime(defaultEndTime || '');
       setReminder('15 min');
       setNotes('');
     }
-  }, [event]);
+  }, [event, defaultDate, defaultStartTime, defaultEndTime]);
 
   const handleAddEvent = () => {
     const formattedDate = new Date(date).toISOString().split('T')[0];
