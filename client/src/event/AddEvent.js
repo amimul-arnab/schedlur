@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './AddEvent.css';
 
-const AddEvent = ({ onClose, event, onAddEvent, onDeleteEvent }) => {
+const AddEvent = ({ onClose, event, onAddEvent, onDeleteEvent, userId }) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -29,7 +29,31 @@ const AddEvent = ({ onClose, event, onAddEvent, onDeleteEvent }) => {
 
   const handleAddEvent = () => {
     const formattedDate = new Date(date).toISOString().split('T')[0];
-    onAddEvent(title, formattedDate, startTime, endTime, reminder, notes);
+    const startDateTime = new Date(`${formattedDate}T${startTime}`);
+    
+    // Calculate reminder time
+    let reminderTime = new Date(startDateTime);
+    switch (reminder) {
+      case '15 min':
+        reminderTime.setMinutes(startDateTime.getMinutes() - 15);
+        break;
+      case '30 min':
+        reminderTime.setMinutes(startDateTime.getMinutes() - 30);
+        break;
+      case '1 hour':
+        reminderTime.setHours(startDateTime.getHours() - 1);
+        break;
+      case '2 hours':
+        reminderTime.setHours(startDateTime.getHours() - 2);
+        break;
+      case '4 hours':
+        reminderTime.setHours(startDateTime.getHours() - 4);
+        break;
+      default:
+        break;
+    }
+
+    onAddEvent(userId, title, formattedDate, startTime, endTime, reminderTime.toISOString(), notes);
   };
 
   const handleDeleteEvent = () => {

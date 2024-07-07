@@ -6,7 +6,7 @@ import AddEvent from './AddEvent';
 import './Event.css';
 import { createEvent, deleteEvent, fetchEvents, updateEvent } from './api'; // Import API functions
 
-const Event = () => {
+const Event = ({ userId }) => { // Add userId as a prop
   const [events, setEvents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -24,10 +24,26 @@ const Event = () => {
         reminder: event.reminder,
         notes: event.notes,
       })));
+      // Set reminders for fetched events
+      fetchedEvents.forEach(event => {
+        setReminderNotification(event);
+      });
     };
 
     loadEvents();
   }, []);
+
+  const setReminderNotification = (event) => {
+    const reminderTime = new Date(event.reminder).getTime();
+    const now = new Date().getTime();
+    const delay = reminderTime - now;
+
+    if (delay > 0) {
+      setTimeout(() => {
+        alert(`Reminder: ${event.title} is starting soon!`);
+      }, delay);
+    }
+  };
 
   const handleDateClick = (arg) => {
     setSelectedEvent({ date: arg.dateStr });
@@ -40,9 +56,9 @@ const Event = () => {
     setIsModalOpen(true);
   };
 
-  const handleAddEvent = async (title, date, startTime, endTime, reminder, notes) => {
+  const handleAddEvent = async (userId, title, date, startTime, endTime, reminder, notes) => {
     if (selectedEvent && selectedEvent.id) {
-      const updatedEvent = await updateEvent(selectedEvent.id, { title, date, startTime, endTime, reminder, notes });
+      const updatedEvent = await updateEvent(selectedEvent.id, { user_id: userId, title, date, startTime, endTime, reminder, notes });
       if (updatedEvent) {
         setEvents(events.map(e => e.id === selectedEvent.id ? {
           ...e,
@@ -52,9 +68,10 @@ const Event = () => {
           reminder: updatedEvent.reminder,
           notes: updatedEvent.notes,
         } : e));
+        setReminderNotification(updatedEvent);
       }
     } else {
-      const newEvent = { title, date, startTime, endTime, reminder, notes };
+      const newEvent = { user_id: userId, title, date, startTime, endTime, reminder, notes };
       const createdEvent = await createEvent(newEvent);
       if (createdEvent) {
         setEvents([...events, {
@@ -65,11 +82,13 @@ const Event = () => {
           reminder: createdEvent.reminder,
           notes: createdEvent.notes,
         }]);
+        setReminderNotification(createdEvent);
       }
     }
     setIsModalOpen(false);
     setSelectedEvent(null);
   };
+  
 
   const handleDeleteEvent = async (id) => {
     const deletedEvent = await deleteEvent(id);
@@ -100,6 +119,7 @@ const Event = () => {
           event={selectedEvent} 
           onAddEvent={handleAddEvent}
           onDeleteEvent={handleDeleteEvent} // Pass the delete handler
+          userId={userId} // Pass userId to AddEvent component
         />}
     </div>
   );
