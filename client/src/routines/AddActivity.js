@@ -10,16 +10,16 @@ const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivit
 
   useEffect(() => {
     if (activity) {
-      setTitle(activity.title);
-      setColor(activity.color);
-      setStartTime(activity.startTime);
-      setEndTime(activity.endTime);
-      setNotes(activity.notes);
+      setTitle(activity.title || '');
+      setColor(activity.color || '#000000');
+      setStartTime(activity.startTime || '');
+      setEndTime(activity.endTime || '');
+      setNotes(activity.notes || '');
     }
   }, [activity]);
 
   const handleSave = () => {
-    const updatedActivity = { title, color, startTime, endTime, notes, date: activity.date };
+    const updatedActivity = { title, color, startTime, endTime, notes, date: activity ? activity.date : new Date() };
     if (activity) {
       onUpdateActivity(activity.id, updatedActivity);
     } else {
@@ -28,7 +28,9 @@ const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivit
   };
 
   const handleDelete = () => {
-    onDeleteActivity(activity.id);
+    if (activity) {
+      onDeleteActivity(activity.id);
+    }
   };
 
   return (
