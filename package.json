@@ -1,11 +1,13 @@
 {
   "dependencies": {
-    "@fullcalendar/daygrid": "^6.1.14",
+    "@fullcalendar/daygrid": "^5.11.5",
     "@fullcalendar/interaction": "^6.1.14",
-    "@fullcalendar/react": "^6.1.14",
+    "@fullcalendar/react": "^5.11.5",
+    "@fullcalendar/timegrid": "^5.11.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
