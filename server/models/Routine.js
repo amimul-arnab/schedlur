@@ -8,7 +8,7 @@ const RoutineSchema = new Schema({
   startTime: { type: String, required: true },
   endTime: { type: String, required: true },
   notes: { type: String, default: '' },
-  color: { type: String, default: '#000000' }, // Add the color field
+  color: { type: String, default: '#000000' }, // Add default color
   created_at: { type: Date, default: Date.now }
 });
 

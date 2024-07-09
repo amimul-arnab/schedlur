@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import './Routine.css';
+import React, { useEffect, useState } from 'react';
 import AddActivity from './AddActivity';
+import { createRoutine, deleteRoutine, fetchRoutines, updateRoutine } from './api';
+import './Routine.css';
 
 const Routine = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -8,6 +9,18 @@ const Routine = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadActivities = async () => {
+      const fetchedActivities = await fetchRoutines();
+      setActivities(fetchedActivities.map(activity => ({
+        ...activity,
+        date: new Date(activity.date),
+        color: activity.color || '#000000' // Ensure a default color value
+      })));
+    };
+    loadActivities();
+  }, []);
 
   const getFormattedDate = (date) => {
     const options = { weekday: 'long', month: '2-digit', day: '2-digit', year: 'numeric' };
@@ -38,27 +51,33 @@ const Routine = () => {
     setError(null);
   };
 
-  const addActivity = (title, color, startTime, endTime, notes) => {
-    const newActivity = { title, color, startTime, endTime, notes, date: currentDate };
-    if (isOverlapping(newActivity)) {
+  const addActivity = async (newActivity) => {
+    const activityWithDate = { ...newActivity, date: currentDate };
+    console.log("Adding Activity: ", activityWithDate); // Debugging to ensure color state is included
+    if (isOverlapping(activityWithDate)) {
       setError('The time slot is overlapping with an existing activity.');
       return;
     }
-    setActivities([...activities, newActivity]);
+    const createdActivity = await createRoutine(activityWithDate);
+    setActivities([...activities, { ...createdActivity, date: new Date(createdActivity.date) }]);
     closeModal();
   };
 
-  const updateActivity = (id, updatedActivity) => {
-    if (isOverlapping(updatedActivity, id)) {
+  const updateActivity = async (id, updatedActivity) => {
+    const activityWithDate = { ...updatedActivity, date: selectedActivity ? selectedActivity.date : new Date() };
+    console.log("Updating Activity: ", activityWithDate); // Debugging to ensure color state is included
+    if (isOverlapping(activityWithDate, id)) {
       setError('The time slot is overlapping with an existing activity.');
       return;
     }
-    setActivities(activities.map((activity, index) => (index === id ? updatedActivity : activity)));
+    const newActivity = await updateRoutine(id, activityWithDate);
+    setActivities(activities.map(activity => (activity._id === id ? { ...newActivity, date: new Date(newActivity.date) } : activity)));
     closeModal();
   };
 
-  const deleteActivity = (id) => {
-    setActivities(activities.filter((_, index) => index !== id));
+  const deleteActivity = async (id) => {
+    await deleteRoutine(id);
+    setActivities(activities.filter(activity => activity._id !== id));
     closeModal();
   };
 
@@ -68,8 +87,8 @@ const Routine = () => {
     
     return activities.some((activity, index) => {
       if (index === excludeId) return false;
-      const existingStart = new Date(`${currentDate.toDateString()} ${activity.startTime}`);
-      const existingEnd = new Date(`${currentDate.toDateString()} ${activity.endTime}`);
+      const existingStart = new Date(`${activity.date.toDateString()} ${activity.startTime}`);
+      const existingEnd = new Date(`${activity.date.toDateString()} ${activity.endTime}`);
       return (newStart < existingEnd && newEnd > existingStart);
     });
   };
@@ -136,7 +155,7 @@ const Routine = () => {
                     height: `${height}%`, 
                     color: textColor 
                   }}
-                  onClick={() => openModal({ ...activity, id: idx })}
+                  onClick={() => openModal({ ...activity, id: activity._id })}
                 >
                   <p className="activity-title">{activity.title}</p>
                   {height > 5 && (
