@@ -1,85 +1,85 @@
-export const fetchEvents = async () => {
+export const fetchRoutines = async () => {
   try {
     const token = localStorage.getItem('token'); // Or however you store the token
     console.log('Fetched Token:', token); // Debug log
-    const response = await fetch('http://localhost:5001/api/events', {
+    const response = await fetch('http://localhost:5001/api/routines', {
       headers: {
         'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
       },
     });
     if (!response.ok) {
-      throw new Error('Failed to fetch events');
+      throw new Error('Failed to fetch routines');
     }
-    const events = await response.json();
-    return events;
+    const routines = await response.json();
+    return routines;
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching routines:', error);
     return [];
   }
 };
 
-export const createEvent = async (event) => {
+export const createRoutine = async (routine) => {
   try {
     const token = localStorage.getItem('token'); // Or however you store the token
     console.log('Fetched Token:', token); // Debug log
-    const response = await fetch('http://localhost:5001/api/events/create', {
+    const response = await fetch('http://localhost:5001/api/routines/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
       },
-      body: JSON.stringify(event),
+      body: JSON.stringify(routine),
     });
     if (!response.ok) {
-      throw new Error('Failed to create event');
+      throw new Error('Failed to create routine');
     }
-    const newEvent = await response.json();
-    return newEvent;
+    const newRoutine = await response.json();
+    return newRoutine;
   } catch (error) {
-    console.error('Error creating event:', error);
+    console.error('Error creating routine:', error);
     return null;
   }
 };
 
-export const updateEvent = async (id, event) => {
+export const updateRoutine = async (id, routine) => {
   try {
     const token = localStorage.getItem('token'); // Or however you store the token
     console.log('Fetched Token:', token); // Debug log
-    const response = await fetch(`http://localhost:5001/api/events/${id}`, {
+    const response = await fetch(`http://localhost:5001/api/routines/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
       },
-      body: JSON.stringify(event),
+      body: JSON.stringify(routine),
     });
     if (!response.ok) {
-      throw new Error('Failed to update event');
+      throw new Error('Failed to update routine');
     }
-    const updatedEvent = await response.json();
-    return updatedEvent;
+    const updatedRoutine = await response.json();
+    return updatedRoutine;
   } catch (error) {
-    console.error('Error updating event:', error);
+    console.error('Error updating routine:', error);
     return null;
   }
 };
 
-export const deleteEvent = async (id) => {
+export const deleteRoutine = async (id) => {
   try {
     const token = localStorage.getItem('token'); // Or however you store the token
     console.log('Fetched Token:', token); // Debug log
-    const response = await fetch(`http://localhost:5001/api/events/${id}`, {
+    const response = await fetch(`http://localhost:5001/api/routines/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`, // Include the token in the Authorization header
       },
     });
     if (!response.ok) {
-      throw new Error('Failed to delete event');
+      throw new Error('Failed to delete routine');
     }
-    return { message: 'Event deleted successfully' };
+    return { message: 'Routine deleted successfully' };
   } catch (error) {
-    console.error('Error deleting event:', error);
+    console.error('Error deleting routine:', error);
     return null;
   }
 };

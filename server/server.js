@@ -21,6 +21,8 @@ app.use(cors({
 // Define Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/events', require('./event/eventRoutes')); // Ensure this line is included
+app.use('/api/routines', require('./routine/routineRoutes')); // Add this line for routines
+
 
 const PORT = process.env.PORT || 5001;
 

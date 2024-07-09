@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './AddActivity.css';
 
 const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivity, activity }) => {
@@ -20,10 +20,11 @@ const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivit
 
   const handleSave = () => {
     const updatedActivity = { title, color, startTime, endTime, notes, date: activity ? activity.date : new Date() };
+    console.log("Saved Activity: ", updatedActivity); // Debugging to ensure color state is included
     if (activity) {
       onUpdateActivity(activity.id, updatedActivity);
     } else {
-      onAddActivity(title, color, startTime, endTime, notes);
+      onAddActivity(updatedActivity);
     }
   };
 
@@ -31,6 +32,10 @@ const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivit
     if (activity) {
       onDeleteActivity(activity.id);
     }
+  };
+
+  const handleColorChange = (e) => {
+    setColor(e.target.value);
   };
 
   return (
@@ -42,7 +47,7 @@ const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivit
           <label>Title:</label>
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
           <label>Color:</label>
-          <input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
+          <input type="color" value={color} onChange={handleColorChange} />
           <label>Time:</label>
           <div className="time-inputs">
             <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
