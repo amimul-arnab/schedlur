@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SignIn.css';
 
@@ -21,13 +21,18 @@ const SignIn = () => {
 
     try {
       const res = await axios.post('http://localhost:5001/api/auth/signin', formData);
-      console.log(res.data);
+      console.log('Response:', res.data);
+      
+      // Store token in localStorage
+      localStorage.setItem('token', res.data.token);
+      console.log('Token stored:', res.data.token);
+
       setMessage('User logged in successfully');
       navigate('/routine');
     } catch (err) {
       console.error('Error response:', err.response);
-      if (err.response && err.response.data && err.response.data.errors) {
-        setMessage(err.response.data.errors[0].msg);
+      if (err.response && err.response.data && err.response.data.msg) {
+        setMessage(err.response.data.msg);
       } else {
         setMessage('An error occurred. Please try again.');
       }

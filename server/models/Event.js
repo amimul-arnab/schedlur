@@ -7,8 +7,8 @@ const EventSchema = new Schema({
   date: { type: Date, required: true },
   startTime: { type: String, required: true },
   endTime: { type: String, required: true },
-  reminder: { type: String, required: true },
-  notes: { type: String },
+  reminder: { type: Date, required: true },
+  notes: { type: String, default: '' },
   created_at: { type: Date, default: Date.now }
 });
 
