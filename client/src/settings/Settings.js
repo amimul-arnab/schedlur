@@ -1,7 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Settings.css';
 
 function Settings() {
+  const [editField, setEditField] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
+  const handleEdit = (field) => {
+    setEditField(field);
+  };
+
+  const handleSave = () => {
+    setEditField(null);
+    if (formData.password.length > 0) {
+      setFormData({
+        ...formData,
+        password: '*********'
+      });
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [editField]: e.target.value
+    });
+  };
+
   return (
     <div className="settings">
       <main className="settings-main">
@@ -9,18 +37,36 @@ function Settings() {
           <h2>Profile:</h2>
           <div className="profile-item">
             <label>Name:</label>
-            <span></span>
-            <button>Change</button>
+            {editField === 'name' ? (
+              <input type="text" placeholder="Full Name" value={formData.name} onChange={handleChange} className="input-visible" />
+            ) : (
+              <span>{formData.name}</span>
+            )}
+            <button onClick={() => (editField === 'name' ? handleSave() : handleEdit('name'))}>
+              {editField === 'name' ? 'Save' : 'Change'}
+            </button>
           </div>
           <div className="profile-item">
             <label>Email:</label>
-            <span></span>
-            <button>Change</button>
+            {editField === 'email' ? (
+              <input type="text" placeholder="Email" value={formData.email} onChange={handleChange} className="input-visible" />
+            ) : (
+              <span>{formData.email}</span>
+            )}
+            <button onClick={() => (editField === 'email' ? handleSave() : handleEdit('email'))}>
+              {editField === 'email' ? 'Save' : 'Change'}
+            </button>
           </div>
           <div className="profile-item">
             <label>Password:</label>
-            <span></span>
-            <button>Change</button>
+            {editField === 'password' ? (
+              <input type="text" placeholder="Password" value={formData.password.replace(/[*]/g, '')} onChange={handleChange} className="input-visible" />
+            ) : (
+              <span>{formData.password}</span>
+            )}
+            <button onClick={() => (editField === 'password' ? handleSave() : handleEdit('password'))}>
+              {editField === 'password' ? 'Save' : 'Change'}
+            </button>
           </div>
         </div>
         <div className="account-management">
