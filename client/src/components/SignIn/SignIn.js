@@ -1,3 +1,5 @@
+// client/src/components/SignIn.js
+
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +24,7 @@ const SignIn = () => {
     try {
       const res = await axios.post('http://localhost:5001/api/auth/signin', formData);
       console.log('Response:', res.data);
-      
+
       // Store token in localStorage
       localStorage.setItem('token', res.data.token);
       console.log('Token stored:', res.data.token);
@@ -66,7 +68,7 @@ const SignIn = () => {
       </form>
       {message && <p className={message.includes('successfully') ? 'success-message' : 'error-message'}>{message}</p>}
       <p>
-        Don't Have an Account? <a className="link" href="/">Sign Up</a>
+        Don't Have an Account? <a className="link" href="/signup">Sign Up</a>
       </p>
     </div>
   );

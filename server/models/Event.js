@@ -1,3 +1,5 @@
+// server/models/Event.js
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -12,4 +14,4 @@ const EventSchema = new Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Event', EventSchema);
+module.exports = mongoose.models.Event || mongoose.model('Event', EventSchema);

@@ -1,14 +1,18 @@
+// server/routes/auth.js
+
 const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const User = require('../models/User');
-const auth = require('../middleware/auth');
-const router = express.Router();
+const User = require('../models/User'); // Correct the import path
+const dotenv = require('dotenv');
 
-// @route   POST api/auth/signup
-// @desc    Register user
-// @access  Public
+dotenv.config();
+
+// @route    POST api/auth/signup
+// @desc     Register user
+// @access   Public
 router.post(
   '/signup',
   [
@@ -28,7 +32,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+        return res.status(400).json({ msg: 'User already exists' });
       }
 
       user = new User({
@@ -51,7 +55,7 @@ router.post(
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }, // Token expires in 1 hour
+        { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
@@ -64,9 +68,9 @@ router.post(
   }
 );
 
-// @route   POST api/auth/signin
-// @desc    Authenticate user and get token
-// @access  Public
+// @route    POST api/auth/signin
+// @desc     Authenticate user & get token
+// @access   Public
 router.post(
   '/signin',
   [
@@ -85,13 +89,13 @@ router.post(
       let user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ msg: 'Invalid credentials' });
+        return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ msg: 'Invalid credentials' });
+        return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
       const payload = {
@@ -103,7 +107,7 @@ router.post(
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }, // Token expires in 1 hour
+        { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
@@ -115,18 +119,5 @@ router.post(
     }
   }
 );
-
-// @route   GET api/auth
-// @desc    Get user by token
-// @access  Private
-router.get('/', auth, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-});
 
 module.exports = router;
