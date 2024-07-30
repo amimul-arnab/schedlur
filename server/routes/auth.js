@@ -5,7 +5,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
-const User = require('../models/User'); // Correct the import path
+const User = require('../models/User');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -23,6 +23,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors during signup:', errors.array()); // Debug log
       return res.status(400).json({ errors: errors.array() });
     }
 
@@ -41,9 +42,7 @@ router.post(
         password,
       });
 
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-
+      // Save the user, which will automatically hash the password due to the pre-save hook
       await user.save();
 
       const payload = {
@@ -62,7 +61,7 @@ router.post(
         }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error('Server error during signup:', err.message); // Debug log
       res.status(500).send('Server error');
     }
   }
@@ -80,21 +79,30 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors during signin:', errors.array()); // Debug log
       return res.status(400).json({ errors: errors.array() });
     }
 
     const { email, password } = req.body;
 
+    console.log('Sign in attempt with email:', email); // Debug log
+
     try {
       let user = await User.findOne({ email });
 
       if (!user) {
+        console.error('User not found for email:', email); // Debug log
         return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      console.log('User found:', user); // Debug log
+
+      // Call the comparePassword method on the user instance
+      const isMatch = await user.comparePassword(password);
+      console.log('Password match result:', isMatch); // Debug log
 
       if (!isMatch) {
+        console.error('Password does not match for user:', email); // Debug log
         return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
@@ -114,7 +122,7 @@ router.post(
         }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error('Server error during signin:', err.message); // Debug log
       res.status(500).send('Server error');
     }
   }
