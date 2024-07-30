@@ -22,7 +22,7 @@ const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivit
     const updatedActivity = { title, color, startTime, endTime, notes, date: activity ? activity.date : new Date() };
     console.log("Saved Activity: ", updatedActivity); // Debugging to ensure color state is included
     if (activity) {
-      onUpdateActivity(activity.id, updatedActivity);
+      onUpdateActivity(activity._id, updatedActivity);
     } else {
       onAddActivity(updatedActivity);
     }
@@ -30,7 +30,7 @@ const AddActivity = ({ onClose, onAddActivity, onUpdateActivity, onDeleteActivit
 
   const handleDelete = () => {
     if (activity) {
-      onDeleteActivity(activity.id);
+      onDeleteActivity(activity._id);
     }
   };
 

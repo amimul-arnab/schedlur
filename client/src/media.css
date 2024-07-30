@@ -1,0 +1,160 @@
+/* media.css */
+
+/* General Styles for Mobile Devices */
+@media only screen and (max-width: 600px) {
+    body {
+      font-size: 14px;
+    }
+    
+    .routine-container,
+    .default-container,
+    .add-activity-container,
+    .date-navigation,
+    .date-display,
+    .nav-arrow,
+    .time-slots,
+    .time-slot,
+    .activity,
+    .activity-title,
+    .activity-time,
+    .activity-notes,
+    button[type="button"],
+    .delete-btn {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      text-align: center;
+    }
+  
+    .container {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    .activity {
+      padding: 5px;
+      font-size: 12px;
+      text-align: center;
+    }
+  
+    .activity-title {
+      font-size: 1em;
+      text-align: center;
+    }
+  
+    .activity-time,
+    .activity-notes {
+      font-size: 0.8em;
+      text-align: center;
+    }
+  
+    button[type="button"] {
+      padding: 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+  
+    .delete-btn {
+      font-size: 14px;
+      text-align: center;
+    }
+  }
+  
+  /* Tablet Devices */
+  @media only screen and (min-width: 601px) and (max-width: 768px) {
+    body {
+      font-size: 16px;
+    }
+  
+    .container {
+      width: 90%;
+      margin: 0 auto;
+    }
+  
+    .activity {
+      padding: 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+  
+    .activity-title {
+      font-size: 1.1em;
+      text-align: center;
+    }
+  
+    .activity-time,
+    .activity-notes {
+      font-size: 0.9em;
+      text-align: center;
+    }
+  
+    button[type="button"] {
+      padding: 10px;
+      font-size: 16px;
+      text-align: center;
+    }
+  
+    .delete-btn {
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+  
+  /* Desktop Devices */
+  @media only screen and (min-width: 769px) {
+    body {
+      font-size: 18px;
+    }
+  
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+  
+    .activity {
+      padding: 10px;
+      font-size: 16px;
+      text-align: center;
+    }
+  
+    .activity-title {
+      font-size: 1.2em;
+      text-align: center;
+    }
+  
+    .activity-time,
+    .activity-notes {
+      font-size: 1em;
+      text-align: center;
+    }
+  
+    button[type="button"] {
+      padding: 12px;
+      font-size: 18px;
+      text-align: center;
+    }
+  
+    .delete-btn {
+      font-size: 18px;
+      text-align: center;
+    }
+  }
+  
+  /* New CSS for allowing full text display */
+  .activity-title,
+  .activity-time,
+  .activity-notes {
+    white-space: normal; /* Allow text to wrap */
+    overflow: visible; /* Ensure full text is visible */
+    text-overflow: clip; /* Clip the overflow text */
+  }
+  
+  .activity {
+    display: flex;
+    align-items: center; /* Align items at the center */
+    justify-content: center;
+    flex-direction: column; /* Ensure the elements are stacked vertically */
+    padding: 10px; /* Adjust padding for better text fit */
+    text-align: center; /* Center align text */
+  }
+  
