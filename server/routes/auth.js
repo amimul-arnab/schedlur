@@ -1,14 +1,18 @@
+// server/routes/auth.js
+
 const express = require('express');
+const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
-const auth = require('../middleware/auth');
-const router = express.Router();
+const dotenv = require('dotenv');
 
-// @route   POST api/auth/signup
-// @desc    Register user
-// @access  Public
+dotenv.config();
+
+// @route    POST api/auth/signup
+// @desc     Register user
+// @access   Public
 router.post(
   '/signup',
   [
@@ -19,6 +23,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors during signup:', errors.array()); // Debug log
       return res.status(400).json({ errors: errors.array() });
     }
 
@@ -28,7 +33,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+        return res.status(400).json({ msg: 'User already exists' });
       }
 
       user = new User({
@@ -37,9 +42,7 @@ router.post(
         password,
       });
 
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
-
+      // Save the user, which will automatically hash the password due to the pre-save hook
       await user.save();
 
       const payload = {
@@ -51,22 +54,22 @@ router.post(
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }, // Token expires in 1 hour
+        { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
         }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error('Server error during signup:', err.message); // Debug log
       res.status(500).send('Server error');
     }
   }
 );
 
-// @route   POST api/auth/signin
-// @desc    Authenticate user and get token
-// @access  Public
+// @route    POST api/auth/signin
+// @desc     Authenticate user & get token
+// @access   Public
 router.post(
   '/signin',
   [
@@ -76,22 +79,31 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors during signin:', errors.array()); // Debug log
       return res.status(400).json({ errors: errors.array() });
     }
 
     const { email, password } = req.body;
 
+    console.log('Sign in attempt with email:', email); // Debug log
+
     try {
       let user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ msg: 'Invalid credentials' });
+        console.error('User not found for email:', email); // Debug log
+        return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      console.log('User found:', user); // Debug log
+
+      // Call the comparePassword method on the user instance
+      const isMatch = await user.comparePassword(password);
+      console.log('Password match result:', isMatch); // Debug log
 
       if (!isMatch) {
-        return res.status(400).json({ msg: 'Invalid credentials' });
+        console.error('Password does not match for user:', email); // Debug log
+        return res.status(400).json({ msg: 'Invalid Credentials' });
       }
 
       const payload = {
@@ -103,30 +115,17 @@ router.post(
       jwt.sign(
         payload,
         process.env.JWT_SECRET,
-        { expiresIn: '1h' }, // Token expires in 1 hour
+        { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
         }
       );
     } catch (err) {
-      console.error(err.message);
+      console.error('Server error during signin:', err.message); // Debug log
       res.status(500).send('Server error');
     }
   }
 );
-
-// @route   GET api/auth
-// @desc    Get user by token
-// @access  Private
-router.get('/', auth, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
-  }
-});
 
 module.exports = router;

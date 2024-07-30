@@ -1,3 +1,5 @@
+// client/src/components/SignUp.js
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +25,11 @@ const SignUp = () => {
     try {
       const res = await axios.post('http://localhost:5001/api/auth/signup', formData);
       console.log(res.data);
+
+      // Store token in localStorage
+      localStorage.setItem('token', res.data.token);
+      console.log('Token stored:', res.data.token);
+
       setMessage('User registered successfully');
       navigate('/routine');
     } catch (err) {
@@ -71,7 +78,7 @@ const SignUp = () => {
       </form>
       {message && <p className={message.includes('successfully') ? 'success-message' : 'error-message'}>{message}</p>}
       <p>
-        Don't Have an Account? <a className="link" href="/signin">Sign In</a>
+        Already have an account? <a className="link" href="/signin">Sign In</a>
       </p>
     </div>
   );

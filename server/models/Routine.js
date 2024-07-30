@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -12,4 +13,4 @@ const RoutineSchema = new Schema({
   created_at: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Routine', RoutineSchema);
+module.exports = mongoose.models.Routine || mongoose.model('Routine', RoutineSchema);
